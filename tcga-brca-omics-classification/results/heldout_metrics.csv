@@ -1,0 +1,2 @@
+model,balanced_accuracy,f1_macro,f1_weighted
+elastic_net,0.8848416289592761,0.8756211488769629,0.8756714431133036

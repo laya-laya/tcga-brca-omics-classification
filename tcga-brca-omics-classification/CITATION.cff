@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite the software and the underlying TCGA/UCSC Xena resources."
+title: "TCGA-BRCA Transcriptomics & Machine Learning"
+version: 1.0.0
+date-released: 2026-09-27
+authors:
+  - family-names: Parkavousi
+    given-names: Laya
+repository-code: "https://github.com/laya-laya/tcga-brca-transcriptomics-ml"
+license: MIT
