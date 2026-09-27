@@ -46,7 +46,7 @@ The repository does **not** commit TCGA data. The downloader retrieves:
 - UCSC Xena `TCGA.BRCA.sampleMap/HiSeqV2`
 - UCSC Xena `TCGA.BRCA.sampleMap/BRCA_clinicalMatrix`
 
-See [`data/README.md`](data/README.md) for details.
+See [`data/README.md`](tcga-brca-omics-classification/data/README.md) for details.
 
 
 
@@ -95,7 +95,7 @@ substantial information about PAM50 subtype structure.
 The main classification ambiguity occurred between Luminal A and Luminal B,
 while Basal tumors were completely separated in this particular held-out split.
 
-![Held-out confusion matrix](figures/confusion_matrix.png)
+![Held-out confusion matrix](tcga-brca-omics-classification/figures/confusion_matrix.png)
 
 ### ROC analysis
 
@@ -106,7 +106,7 @@ One-vs-rest ROC-AUC values on the held-out test set were:
 - Luminal A: 0.975
 - Luminal B: 0.951
 
-![One-vs-rest ROC curves](figures/roc_ovr.png)
+![One-vs-rest ROC curves](tcga-brca-omics-classification/figures/roc_ovr.png)
 
 ### Basal vs Luminal A transcriptomic differences
 
@@ -118,7 +118,7 @@ procedure.
 Positive expression differences indicate higher expression in Basal tumors;
 negative differences indicate higher expression in Luminal A tumors.
 
-![Basal vs LumA volcano plot](figures/volcano_basal_vs_luma.png)
+![Basal vs LumA volcano plot](tcga-brca-omics-classification/figures/volcano_basal_vs_luma.png)
 
 ### Feature-selection stability
 
@@ -131,4 +131,4 @@ NCAPH, HMGA1, NEIL3, CDCA8, CDCA5, FOXM1, CCNA2, XBP1, SPDEF and SERPINA11.
 These genes should be interpreted as reproducible predictive features rather
 than causal subtype drivers.
 
-![Top-gene expression heatmap](figures/top_gene_heatmap.png)
+![Top-gene expression heatmap](tcga-brca-omics-classification/figures/top_gene_heatmap.png)
