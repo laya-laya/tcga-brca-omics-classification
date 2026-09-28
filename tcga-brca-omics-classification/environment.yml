@@ -9,6 +9,10 @@ dependencies:
   - scikit-learn
   - matplotlib
   - statsmodels
+  - joblib
+  - fastapi
+  - uvicorn
+  - httpx
   - jupyterlab
   - pytest
   - pip

@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: tcga-brca-omics-classification
+
+jobs:
+  test:
+    name: Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: tcga-brca-omics-classification/pyproject.toml
+      - name: Install package with test and API extras
+        run: python -m pip install -e ".[dev,serve]"
+      - name: Run tests
+        run: python -m pytest -q
+
+  docker:
+    name: Docker image smoke test
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t tcga-brca-classifier .
+      - name: Batch job on synthetic data
+        run: |
+          docker run --rm tcga-brca-classifier sh -c "
+            python -m tcga_brca.demo --model /tmp/demo.joblib --samples /tmp/batch.tsv &&
+            python -m tcga_brca.predict --model /tmp/demo.joblib --input /tmp/batch.tsv --output /tmp/predictions.csv"
+      - name: API responds to /health and /predict
+        run: |
+          docker run -d --name api -p 8000:8000 -e MODEL_PATH=/tmp/demo.joblib tcga-brca-classifier \
+            sh -c "python -m tcga_brca.demo --model /tmp/demo.joblib && exec uvicorn tcga_brca.api:app --host 0.0.0.0 --port 8000"
+          for i in $(seq 1 60); do curl -fsS localhost:8000/health && break; sleep 1; done
+          curl -fsS localhost:8000/health
+          genes=$(curl -fsS localhost:8000/model | python -c "import sys, json; print(json.load(sys.stdin)['n_model_genes'])")
+          echo "model uses $genes genes"
+          curl -fsS -X POST localhost:8000/predict -H "Content-Type: application/json" \
+            -d "$(python -c "import json; print(json.dumps({'samples': {'S1': {f'GENE{i:04d}': 8.0 for i in range(300)}}}))")"
+      - name: Container logs
+        if: always()
+        run: docker logs api || true

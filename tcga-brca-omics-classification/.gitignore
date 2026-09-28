@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Data: downloaded or generated, never committed (see data/README.md)
+data/raw/
+data/processed/
+data/demo/
+predictions/
+
+# Demo models trained on synthetic data
+models/demo.joblib
